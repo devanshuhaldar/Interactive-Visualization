@@ -1,0 +1,297 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Initialize a select button -->
+<select id="selectButton"></select>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz" style="position: relative;"></div>
+
+<!-- Add the image tag after the SVG container -->
+<img id="graphImage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/City_of_Troy_map_2.svg/1200px-City_of_Troy_map_2.svg.png" alt="Graph Image" style="position: absolute; right: 0;">
+
+<!-- Add a div for the caption -->
+<div id="caption">
+  <h1 style="font-size: 10px;">map image from: https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/City_of_Troy_map_2.svg/1200px-City_of_Troy_map_2.svg.png</h1>
+</div>
+
+<!-- Update the CSS to style the image -->
+<style>
+  #graphImage {
+    position: absolute;
+    top: 50px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    width: 200px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+  }
+</style>
+
+
+<div id="tooltip" style="position: absolute; visibility: hidden; background-color: lightgrey; padding: 10px; border-radius: 4px;"> </div>
+
+<!-- Color Scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script>
+// set the dimensions and margins of the graph
+var margin = {top: 50, right: 30, bottom: 50, left: 80},
+    width = 700 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("text")
+    .attr("x", (width / 2))             
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "24px") 
+    .style("text-decoration", "underline")  
+    .append("tspan") // Append the first line of the title
+    .attr("x", (width / 2))             
+    .attr("dy", "1em") // Adjust vertical offset as needed
+    .text("Average Price of Single Family Homes")
+    .append("tspan") // Append the second line of the title
+    .attr("x", (width / 2))             
+    .attr("dy", "1em") // Adjust vertical offset as needed
+    .text("in Troy Neighborhoods Over the Past 20 Years");
+
+// Add y-axis label
+svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Price ($)");  
+
+// Add x-axis label
+svg.append("text")             
+    .attr("transform",
+          "translate(" + (width/2) + " ," + 
+                         (height + margin.top ) + ")")
+    .style("text-anchor", "middle")
+    .text("Year");
+
+var tooltip = d3.select("body").append("div")
+    .attr("id", "tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .style("background-color", "lightgrey")
+    .style("padding", "10px")
+    .style("border-radius", "4px");
+
+
+d3.csv("https://raw.githubusercontent.com/squidma1/iv/main/new_aggregated_prices.csv", function(data) {
+
+    // List of groups (here I have one group per column)
+    var allGroup = d3.map(data, function(d){return(d.RegionName)}).keys()
+
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+     	// .data(allGroup)
+      .data(['All'].concat(allGroup))
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    var myColor = d3.scaleOrdinal()
+    .domain(allGroup)
+    .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"]);
+
+    
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) { return d.Year; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(7).tickFormat(d3.format('d')));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.Value; })])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+    
+
+    // Initialize line with first group of the list
+    
+      
+      function update(selectedGroup) {
+          
+          
+        // If 'All' is selected, we need to display all groups
+        if(selectedGroup === 'All') {
+          // Assuming the legend is placed on the right side of the chart
+          // Assuming the legend is placed on the right side of the chart
+          var legendWidth = 220; // Increased width for larger legend
+          var legendPosition = width + margin.left + 10; // Positioning legend to the right of the chart
+
+          var legend = svg.selectAll(".legend")
+            .data(allGroup)
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) { return "translate(" + legendPosition + "," + i * 40 + ")"; }); // Increased spacing between legend items
+
+          legend.append("rect")
+            .attr("x", 0) // Position of legend squares
+            .attr("width", 25) // Increased width of legend squares
+            .attr("height", 25) // Increased height of legend squares
+            .style("fill", myColor);
+
+          legend.append("text")
+            .attr("x", 35) // Increased spacing between squares and text
+            .attr("y", 13) // Vertically center the text
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(function(d) { return d; })
+            .style("font-size", "16px"); // Increased font size
+
+          // Update the SVG container to accommodate the larger legend
+          d3.select("#my_dataviz svg")
+            .attr("width", width + margin.left + margin.right + legendWidth);
+
+          // Remove all existing lines to prevent duplicates
+          svg.selectAll(".line").remove();
+
+          // Bind each group's data to a line
+          allGroup.forEach(function(group) {
+            svg.append("path")
+              .datum(data.filter(function(d){ return d.RegionName == group; }))
+              .attr("class", "line")
+              .attr("d", d3.line()
+                .x(function(d) { return x(d.Year); })
+                .y(function(d) { return y(+d.Value); })
+              )
+              .attr("stroke", function(d){ return myColor(group); })
+              .style("stroke-width", 4)
+              .style("fill", "none");
+          });
+        } else {
+            // Create new data with the selection
+            var dataFilter = data.filter(function(d){return d.RegionName==selectedGroup});
+
+            // This allows to find the closest X index of the mouse:
+            var bisect = d3.bisector(function(d) { return d.Year; }).left;
+
+
+            // Update the line for the selected group
+            svg.selectAll(".line").remove(); // Remove old lines
+
+            svg.append("path")
+                .datum(dataFilter)
+                .attr("class", "line")
+                .transition()
+                .duration(1000)
+                .attr("d", d3.line()
+                .x(function(d) { return x(d.Year); })
+                .y(function(d) { return y(+d.Value); })
+                )
+                .attr("stroke", function(d){ return myColor(selectedGroup); })
+                .style("stroke-width", 4)
+                .style("fill", "none");
+
+            // Create a rect on top of the svg area: this rectangle recovers mouse position
+            svg
+                .append('rect')
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .attr('width', width)
+                .attr('height', height)
+                .on('mouseover', mouseover)
+                .on('mousemove', mousemove)
+                .on('mouseout', mouseout);
+
+            // Create the circle that travels along the curve of chart
+            var focus = svg
+            .append('g')
+            .append('circle')
+                .style("fill", "none")
+                .attr("stroke", "black")
+                .attr('r', 8.5)
+                .style("opacity", 0)
+
+            // Create the text that travels along the curve of chart
+            // Create the text that travels along the curve of chart
+            // Create the text that travels along the curve of chart
+            var focusText = svg
+                .append('g')
+                .append('text')
+                    .style("opacity", 0)
+                    .attr("text-anchor", "left")
+                    .attr("alignment-baseline", "middle")
+                    .style("font-size", "14px"); // Adjust font size as needed
+
+            // Append the text element for the text content with stroke
+            focusText.append("tspan").attr("class", "text-content").style("stroke", "white").style("stroke-width", "4px");
+
+            // Append a second tspan element for the text content without stroke
+            focusText.append("tspan").attr("class", "text-content-no-stroke");
+
+
+            // What happens when the mouse move -> show the annotations at the right positions.
+            function mouseover() {
+                focus.style("opacity", 1)
+                focusText.style("opacity",1)
+            }
+
+            function mousemove() {
+                // recover coordinate we need
+                var x0 = x.invert(d3.mouse(this)[0]);
+                var i = bisect(dataFilter, x0, 1);
+                selectedData = dataFilter[i]
+                focus
+                    .attr("cx", x(selectedData.Year))
+                    .attr("cy", y(selectedData.Value));
+
+                // Update the text content and position for the first tspan (with stroke)
+                focusText.select(".text-content")
+                    .text(selectedData.Year + ":  " + "$" + parseFloat(selectedData.Value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) // Adjust text content as needed
+                    .attr("x", x(selectedData.Year) + 15)
+                    .attr("y", y(selectedData.Value));
+
+                // Update the text content and position for the second tspan (without stroke)
+                focusText.select(".text-content-no-stroke")
+                    .text(selectedData.Year + ":  " + "$" + parseFloat(selectedData.Value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) // Adjust text content as needed
+                    .attr("x", x(selectedData.Year) + 15)
+                    .attr("y", y(selectedData.Value));
+            }
+
+                
+            
+            function mouseout() {
+                focus.style("opacity", 0)
+                focusText.style("opacity", 0)
+            }
+        }
+      }
+
+    
+    d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+
+    update("All");
+
+    
+    
+
+})
+</script>
