@@ -1,0 +1,157 @@
+digraph RandomBipartiteGraph {
+	_Node_0 [color=red]
+	_Node_1 [color=red]
+	_Node_2 [color=red]
+	_Node_3 [color=red]
+	_Node_4 [color=red]
+	_Node_5 [color=red]
+	_Node_6 [color=red]
+	_Node_7 [color=red]
+	_Node_8 [color=red]
+	_Node_9 [color=red]
+	_Node_10 [color=red]
+	_Node_11 [color=red]
+	_Node_12 [color=red]
+	_Node_13 [color=red]
+	_Node_14 [color=red]
+	Set2_Node_0 [color=blue]
+	Set2_Node_1 [color=blue]
+	Set2_Node_2 [color=blue]
+	Set2_Node_3 [color=blue]
+	Set2_Node_4 [color=blue]
+	Set2_Node_5 [color=blue]
+	Set2_Node_6 [color=blue]
+	Set2_Node_7 [color=blue]
+	Set2_Node_8 [color=blue]
+	Set2_Node_9 [color=blue]
+	Set2_Node_10 [color=blue]
+	Set2_Node_11 [color=blue]
+	Set2_Node_12 [color=blue]
+	Set2_Node_13 [color=blue]
+	Set2_Node_14 [color=blue]
+	_Node_0 -> Set2_Node_1
+	_Node_0 -> Set2_Node_3
+	_Node_0 -> Set2_Node_4
+	_Node_0 -> Set2_Node_5
+	_Node_0 -> Set2_Node_6
+	_Node_0 -> Set2_Node_10
+	_Node_0 -> Set2_Node_11
+	_Node_0 -> Set2_Node_12
+	_Node_1 -> Set2_Node_2
+	_Node_1 -> Set2_Node_3
+	_Node_1 -> Set2_Node_4
+	_Node_1 -> Set2_Node_6
+	_Node_1 -> Set2_Node_8
+	_Node_1 -> Set2_Node_9
+	_Node_1 -> Set2_Node_10
+	_Node_1 -> Set2_Node_13
+	_Node_2 -> Set2_Node_4
+	_Node_2 -> Set2_Node_5
+	_Node_2 -> Set2_Node_7
+	_Node_2 -> Set2_Node_10
+	_Node_2 -> Set2_Node_11
+	_Node_2 -> Set2_Node_12
+	_Node_2 -> Set2_Node_13
+	_Node_3 -> Set2_Node_1
+	_Node_3 -> Set2_Node_3
+	_Node_3 -> Set2_Node_5
+	_Node_3 -> Set2_Node_6
+	_Node_3 -> Set2_Node_9
+	_Node_3 -> Set2_Node_11
+	_Node_3 -> Set2_Node_13
+	_Node_4 -> Set2_Node_0
+	_Node_4 -> Set2_Node_2
+	_Node_4 -> Set2_Node_3
+	_Node_4 -> Set2_Node_4
+	_Node_4 -> Set2_Node_5
+	_Node_4 -> Set2_Node_7
+	_Node_4 -> Set2_Node_10
+	_Node_4 -> Set2_Node_12
+	_Node_4 -> Set2_Node_13
+	_Node_4 -> Set2_Node_14
+	_Node_5 -> Set2_Node_0
+	_Node_5 -> Set2_Node_1
+	_Node_5 -> Set2_Node_3
+	_Node_5 -> Set2_Node_5
+	_Node_5 -> Set2_Node_6
+	_Node_5 -> Set2_Node_7
+	_Node_5 -> Set2_Node_8
+	_Node_5 -> Set2_Node_11
+	_Node_5 -> Set2_Node_12
+	_Node_5 -> Set2_Node_14
+	_Node_6 -> Set2_Node_4
+	_Node_6 -> Set2_Node_5
+	_Node_6 -> Set2_Node_7
+	_Node_6 -> Set2_Node_8
+	_Node_6 -> Set2_Node_11
+	_Node_6 -> Set2_Node_13
+	_Node_7 -> Set2_Node_3
+	_Node_7 -> Set2_Node_4
+	_Node_7 -> Set2_Node_6
+	_Node_7 -> Set2_Node_7
+	_Node_7 -> Set2_Node_8
+	_Node_7 -> Set2_Node_9
+	_Node_7 -> Set2_Node_10
+	_Node_8 -> Set2_Node_0
+	_Node_8 -> Set2_Node_2
+	_Node_8 -> Set2_Node_3
+	_Node_8 -> Set2_Node_4
+	_Node_8 -> Set2_Node_5
+	_Node_8 -> Set2_Node_6
+	_Node_8 -> Set2_Node_9
+	_Node_8 -> Set2_Node_10
+	_Node_8 -> Set2_Node_12
+	_Node_8 -> Set2_Node_13
+	_Node_8 -> Set2_Node_14
+	_Node_9 -> Set2_Node_1
+	_Node_9 -> Set2_Node_2
+	_Node_9 -> Set2_Node_4
+	_Node_9 -> Set2_Node_5
+	_Node_9 -> Set2_Node_6
+	_Node_9 -> Set2_Node_7
+	_Node_9 -> Set2_Node_9
+	_Node_9 -> Set2_Node_11
+	_Node_9 -> Set2_Node_12
+	_Node_9 -> Set2_Node_14
+	_Node_10 -> Set2_Node_0
+	_Node_10 -> Set2_Node_2
+	_Node_10 -> Set2_Node_4
+	_Node_10 -> Set2_Node_6
+	_Node_10 -> Set2_Node_7
+	_Node_10 -> Set2_Node_9
+	_Node_10 -> Set2_Node_10
+	_Node_10 -> Set2_Node_13
+	_Node_11 -> Set2_Node_0
+	_Node_11 -> Set2_Node_1
+	_Node_11 -> Set2_Node_2
+	_Node_11 -> Set2_Node_3
+	_Node_11 -> Set2_Node_4
+	_Node_11 -> Set2_Node_10
+	_Node_11 -> Set2_Node_11
+	_Node_11 -> Set2_Node_13
+	_Node_12 -> Set2_Node_0
+	_Node_12 -> Set2_Node_1
+	_Node_12 -> Set2_Node_3
+	_Node_12 -> Set2_Node_4
+	_Node_12 -> Set2_Node_7
+	_Node_12 -> Set2_Node_8
+	_Node_12 -> Set2_Node_10
+	_Node_12 -> Set2_Node_11
+	_Node_12 -> Set2_Node_12
+	_Node_12 -> Set2_Node_14
+	_Node_13 -> Set2_Node_0
+	_Node_13 -> Set2_Node_2
+	_Node_13 -> Set2_Node_5
+	_Node_13 -> Set2_Node_8
+	_Node_13 -> Set2_Node_9
+	_Node_13 -> Set2_Node_12
+	_Node_13 -> Set2_Node_13
+	_Node_13 -> Set2_Node_14
+	_Node_14 -> Set2_Node_0
+	_Node_14 -> Set2_Node_1
+	_Node_14 -> Set2_Node_2
+	_Node_14 -> Set2_Node_3
+	_Node_14 -> Set2_Node_6
+	_Node_14 -> Set2_Node_8
+	_Node_14 -> Set2_Node_13
+}

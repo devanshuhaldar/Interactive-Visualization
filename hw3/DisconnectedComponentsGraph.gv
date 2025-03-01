@@ -1,0 +1,16 @@
+digraph DisconnectedComponentsGraph {
+	_Node1 [color=red]
+	_Node1 -> _Node2
+	_Node2 [color=red]
+	_Node2 -> _Node3
+	_Node3 [color=red]
+	_Node3 -> _Node4
+	_Node4 [color=red]
+	_Node4 -> _Node5
+	_Node5 [color=red]
+	_Node1 [color=blue]
+	_Node1 -> _Node2
+	_Node2 [color=blue]
+	_Node2 -> _Node3
+	_Node3 [color=blue]
+}
