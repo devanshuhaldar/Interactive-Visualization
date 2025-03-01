@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamgraph Visualization</title>
+    <!-- Include D3.js -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        /* Add your CSS styles here if needed */
+    </style>
+</head>
+<body>
+
+<script>
+    // Your CSV data (replace this with your actual data)
+    d3.csv("dante_streamgraph_data.csv").then(function(data){ // or dante_streamgraph_data.csv
+
+    // Extract column names excluding the "Date"
+        var columns = Object.keys(data[0]).filter(col => col !== "Date");
+
+        // Parse date and format the data for D3
+        var parseDate = d3.timeParse("%Y-%m-%d");
+        data.forEach(d => {
+            d.Date = parseDate(d.Date);
+            d.total = 0;
+            columns.forEach(col => {
+                d[col] = +d[col];
+                d.total += d[col];
+            });
+        });
+
+        // Set up dimensions for the chart
+        var margin = { top: 20, right: 30, bottom: 30, left: 40 },
+            width = 800 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+        // Create an SVG element
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Stack the data
+        var stack = d3.stack().keys(["Protein", "Vegetables", "Carbs", "Fruits", "Drinks"]);
+        var stackedData = stack(data);
+
+        // Set up scales
+        var x = d3.scaleTime().domain(d3.extent(data, d => d.Date)).range([0, width]);
+        var y = d3.scaleLinear().domain([0, d3.max(stackedData, d => d3.max(d, d => d[1]))]).range([height, 0]);
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // Area generator
+        var area = d3.area()
+            .x(d => x(d.data.Date))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]))
+            .curve(d3.curveBasis);
+
+        // Append the streamgraph areas
+        svg.selectAll("path")
+            .data(stackedData)
+            .enter().append("path")
+            .attr("fill", d => color(d.key))
+            .attr("d", area);
+
+        // Add x-axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Add y-axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        // Add legend
+        // Add legend
+        var legend = svg.selectAll(".legend")
+            .data(["Protein", "Vegetables", "Carbs", "Fruits", "Drinks"])
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => "translate(" + i * 100 + ", 0)");
+
+        legend.append("rect")
+            .attr("x", 0)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(d => d);
+
+    });
+    
+</script>
+
+</body>
+</html>
